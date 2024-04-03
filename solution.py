@@ -15,24 +15,42 @@
 
     ALGORITHM
 
-        1. Iterate through the second array to see if any fish is moving in opposite direction. i.e check A against B
+        0. Create a function that receives both arrays, define a counter and a list of fishes headed upstream
+        1. Iterate through the second array to see if any fish is moving in opposite direction.
+        2. Store the fish moving upstream in an array us if B[i] == 0
+        3. If the fish is moving downstream, check the last element that was added to us. It will either eat
+            the fish or be eaten
+        4. Implement a while loop to continuously check. If the last fish appended in us eats the current fish. 
+            Increment the counter, if it is eaten, pop the appended fish and the while loop checks again against
+            last fish in upstream fish until the condition is fulfilled
+        5. Return the difference between original length of fishes passed and eaten fish
 '''
 
 def solution(A,B):
     counter = 0
-    eaten_fish = []
-        # checks for all fish going downstream
+    us = []
+        # checks for all fish going upstream, it either eats or is eaten by downstream fish
     for i in range(len(B)):
-            # checks for all fish going downstream
-        if B[i] == 1:
-            if A[i] < A[i-1]:
-                eaten_fish.append(A[i])
-                counter += 1
-    # print(eaten_fish)
-    
-    return len(A) - len(eaten_fish)
+            # checks for all fish going upstream
+        if B[i] == 0:
+            us.append(A[i])
 
-        
+        # if it encounters a downstream fish
+        else:
+            # while upstream has a value it either eats or is eaten
+            # checks if last element in us is greater than current element
+            while len(us) != 0:
+                if us[-1] > A[i]:
+                    counter += 1
+                    break
+                elif us[-1] < A[i]:
+                    us.pop()
+                    counter += 1
+    # print(us)
+    
+    return len(A) - counter
+
+#[4,2,1,0]
 
             
 
